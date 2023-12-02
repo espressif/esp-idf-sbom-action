@@ -1,0 +1,8 @@
+name: 'ESP IDF SBOM Vulnerability Scan'
+description: 'Scan manifest files with CPE info in repository for possible vulnerabilities'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+outputs:
+  vulnerable:
+    description: 'Set to 1 if vulnerability was found, 0 otherwise'
