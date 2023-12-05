@@ -1,15 +1,24 @@
 # ESP IDF SBOM Vulnerability Scan Action
 
-This action scans manifest files with CPE info in
-repository for possible vulnerabilities.
+This action scans manifest files with CPE info in repository for possible
+vulnerabilities and optionaly sends message to a Mattermost channel.
 
 ## Secrets
 
 ## `SBOM_MATTERMOST_WEBHOOK`
 
-If the `SBOM_MATTERMOST_WEBHOOK` environment variable is set, a brief status message
-containing the job link will automatically be dispatched to the Mattermost
-webhook.
+If the `SBOM_MATTERMOST_WEBHOOK` environment variable is set and not null, a
+brief status message containing the job link will automatically be dispatched
+to the Mattermost webhook. Author of the message is set as
+`${GITHUB_REPOSITORY}@${INPUT_REF:-$GITHUB_REF_NAME}`, where `INPUT_REF` may
+be set via action inputs.
+
+## Inputs
+
+## `ref`
+
+Reference name. If not set `GITHUB_REF_NAME` is used by default. Can be used
+to explicitly set the reference in the Mattermost message user name.
 
 ## Outputs
 

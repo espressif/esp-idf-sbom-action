@@ -3,6 +3,9 @@ description: 'Scan manifest files with CPE info in repository for possible vulne
 runs:
   using: 'docker'
   image: 'Dockerfile'
+inputs:
+  ref:
+    description: 'Reference name. If not set `GITHUB_REF_NAME` is used by default.'
 outputs:
   vulnerable:
-    description: 'Set to 1 if vulnerability was found, 0 otherwise'
+    description: 'Set to 1 if vulnerability was found or 128 on error, 0 otherwise'

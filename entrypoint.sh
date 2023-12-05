@@ -6,17 +6,25 @@ die () {
 }
 
 notify_mattermost () {
-	test -n "${SBOM_MATTERMOST_WEBHOOK+x}" || return
+	test -n "${SBOM_MATTERMOST_WEBHOOK:+x}" || return
 
-	if test $1 -eq 0
-	then
+	case $1 in
+	0)
 		MSG=":large_green_circle: No vulnerabilities found"
-	else
+		;;
+	1)
 		MSG=":red_circle: New vulnerabilities found"
-	fi
+		;;
+	128)
+		MSG=":large_yellow_circle: Vulnerabilities scan failed"
+		;;
+	*)
+		MSG=":large_yellow_circle: Unknown return value"
+		;;
+	esac
 
 	JOB_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-	USER_NAME="${GITHUB_REPOSITORY}@${GITHUB_REF_NAME}"
+	USER_NAME="${GITHUB_REPOSITORY}@${INPUT_REF:-$GITHUB_REF_NAME}"
 	curl --no-progress-meter -i -X POST -H 'Content-Type: application/json'\
 		-d "{\"username\": \"${USER_NAME}\", \"text\": \"${MSG} ${JOB_URL}\"}"\
 		"$SBOM_MATTERMOST_WEBHOOK"
